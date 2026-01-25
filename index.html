@@ -5,13 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>KR Service - Premium Coordinator</title>
     
-    <!-- Google Fonts: Noto Sans Thai -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -19,6 +16,7 @@
             --kr-primary: #6366f1;
             --kr-secondary: #ec4899;
             --kr-accent: #8b5cf6;
+            --kr-tagpay: #10b981;
         }
 
         body {
@@ -60,7 +58,11 @@
             transition: all 0.3s ease;
             box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
         }
-        .btn-primary:active { transform: scale(0.97); }
+        .btn-tagpay {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        }
+        .btn-primary:active, .btn-tagpay:active { transform: scale(0.97); }
 
         .service-card {
             border-radius: 28px;
@@ -73,13 +75,13 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
         }
 
-        .input-group input, .input-group select {
+        .input-group input, .input-group select, .input-group textarea {
             border-radius: 16px;
             border: 1.5px solid #f1f5f9;
             background: #f8fafc;
             transition: all 0.2s;
         }
-        .input-group input:focus {
+        .input-group input:focus, .input-group textarea:focus {
             border-color: var(--kr-primary);
             background: white;
             outline: none;
@@ -107,10 +109,29 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .legal-box {
-            background: #fdf2f8;
-            border: 1px solid #fce7f3;
+        .law-box {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
             border-radius: 20px;
+        }
+
+        .packing-instruction {
+            background: #f0fdf4;
+            border: 1.5px dashed #bbf7d0;
+            border-radius: 24px;
+        }
+
+        .step-badge {
+            width: 20px;
+            height: 20px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
         }
 
         #toast {
@@ -146,7 +167,7 @@
 
         <nav class="glass-nav sticky top-[6px] z-40 px-6 py-4 flex justify-between items-center border-b border-gray-50">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black italic shadow-lg">KR</div>
+                <div onclick="showHome()" class="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black italic shadow-lg cursor-pointer">KR</div>
                 <div>
                     <h1 class="font-extrabold text-slate-800 text-lg leading-tight tracking-tight">KR SERVICE</h1>
                     <div class="flex items-center gap-1">
@@ -163,8 +184,30 @@
         </nav>
 
         <main id="app-content" class="flex-grow p-6 overflow-x-hidden">
-            <!-- Dynamic Content -->
         </main>
+
+        <div class="px-6 pb-2">
+            <div class="law-box p-4 shadow-sm">
+                <h4 class="text-amber-800 font-extrabold text-sm flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-gavel text-amber-500"></i>
+                    ข้อตกลงและกฎหมาย
+                </h4>
+                <ul class="space-y-2">
+                    <li class="flex gap-2 items-start">
+                        <span class="text-amber-500 mt-1 text-[8px]">•</span>
+                        <p class="text-[11px] font-bold text-amber-900/80 leading-relaxed">KR Service เป็นเพียงตัวกลางในการประสานงาน ไม่ใช่บริษัทขนส่งโดยตรง</p>
+                    </li>
+                    <li class="flex gap-2 items-start">
+                        <span class="text-amber-500 mt-1 text-[8px]">•</span>
+                        <p class="text-[11px] font-bold text-amber-900/80 leading-relaxed">เราไม่รับผิดชอบต่อความเสียหาย สูญหาย หรืออุบัติเหตุระหว่างการปฏิบัติงาน</p>
+                    </li>
+                    <li class="flex gap-2 items-start">
+                        <span class="text-amber-500 mt-1 text-[8px]">•</span>
+                        <p class="text-[11px] font-bold text-amber-900/80 leading-relaxed">การชำระเงินให้ตกลงกับคนขับโดยตรง เว้นแต่กรณีที่มีการเรียกเก็บล่วงหน้าผ่านระบบ</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
         <footer class="p-6 text-center">
             <p class="text-[10px] text-slate-300 font-medium tracking-widest">© 2024 KR LOGISTICS COORDINATOR</p>
@@ -173,17 +216,20 @@
 
     <script>
         const services = [
+            { id: 'tagpay', title: 'เรียกแท็กเป (Tag-pay)', icon: 'fa-box-archive', color: 'text-emerald-500', bg: 'bg-emerald-50', desc: 'บริการเรียกแท็กเป ค่าส่ง 1,000/กล่อง + ระบบ 1,000' },
             { id: 'moving', title: 'ย้ายงาน / ขนของ', icon: 'fa-truck-fast', color: 'text-indigo-500', bg: 'bg-indigo-50', desc: 'ย้ายงาน ขนของ ย้ายงานพิเศษ ' },
             { id: 'medical', title: 'โรงพยาบาล / คลินิก', icon: 'fa-hospital-user', color: 'text-rose-500', bg: 'bg-rose-50', desc: 'รับส่งพบแพทย์ จัดฟัน ศัลยกรรม' },
-            { id: 'document', title: 'พาสปอร์ต / สถานทูต', icon: 'fa-id-card-clip', color: 'text-amber-500', bg: 'bg-amber-50', desc: 'ทำพาสปอร์ต บัตร ปชช. รายงายตัวกลับ ส่งสนามบิน สถานทูต' }
+            { id: 'document', title: 'พาสปอร์ต / สถานทูต', icon: 'fa-id-card-clip', color: 'text-amber-500', bg: 'bg-amber-50', desc: 'ทำพาสปอร์ต บัตร ปชช. ส่งสถานทูต' }
         ];
 
         const content = document.getElementById('app-content');
+        const BOX_PRICE = 1000;      // ค่าส่งกล่องละ 1,000 วอน
+        const SYSTEM_FEE = 1000;    // ค่าประสานงานระบบคงที่ 1,000 วอน
 
         function showHome() {
             let html = `
                 <div class="page-transition">
-                    <div class="mb-8">
+                    <div class="mb-6">
                         <h2 class="text-3xl font-black text-slate-900">สวัสดีครับ <span class="text-indigo-600 underline decoration-indigo-200 underline-offset-4">ต้องการไปที่ไหน?</span></h2>
                         <p class="text-slate-400 text-sm mt-2 font-medium">เราประสานงานรถให้คุณฟรี ไม่มีค่าธรรมเนียมแอป</p>
                     </div>
@@ -198,7 +244,10 @@
                             <i class="fa-solid ${s.icon}"></i>
                         </div>
                         <div class="flex-1">
-                            <h3 class="font-bold text-slate-800 text-lg">${s.title}</h3>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-bold text-slate-800 text-lg">${s.title}</h3>
+                                ${s.id === 'tagpay' ? '<span class="bg-emerald-500 text-white text-[9px] px-2 py-0.5 rounded-full animate-pulse uppercase tracking-tighter">Fast Service</span>' : ''}
+                            </div>
                             <p class="text-xs text-slate-400 font-medium">${s.desc}</p>
                         </div>
                         <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300">
@@ -210,20 +259,6 @@
 
             html += `
                     </div>
-
-                    <!-- นำคำอธิบายกลับมาแสดงที่หน้าแรก -->
-                    <div class="legal-box mt-10 p-5 relative overflow-hidden">
-                        <div class="absolute -right-4 -bottom-4 text-pink-100 text-6xl rotate-12">
-                            <i class="fa-solid fa-scale-balanced"></i>
-                        </div>
-                        <h4 class="text-pink-600 font-bold text-sm mb-2 flex items-center gap-2">
-                            <i class="fa-solid fa-circle-info"></i>
-                            ข้อกำหนดทางกฎหมาย
-                        </h4>
-                        <div class="text-[11px] text-pink-900/70 leading-relaxed font-medium">
-                            KR Service เป็นเพียงผู้ประสานงาน (Coordinator) เท่านั้น การจองไม่มีค่าธรรมเนียมใดๆ แอบแฝง ค่าบริการจริงจะตกลงกับคนขับรถโดยตรง เราไม่ใช่ผู้ขนส่งและไม่รับผิดชอบต่อความเสียหายใดๆ
-                        </div>
-                    </div>
                 </div>
             `;
             content.innerHTML = html;
@@ -231,6 +266,8 @@
 
         function showForm(serviceId) {
             const service = services.find(s => s.id === serviceId);
+            if (serviceId === 'tagpay') { showTagPayForm(service); return; }
+
             content.innerHTML = `
                 <div class="page-transition">
                     <button onclick="showHome()" class="mb-6 text-slate-400 font-bold text-xs flex items-center gap-2 hover:text-indigo-600 transition">
@@ -290,17 +327,8 @@
                                 </select>
                             </div>
                         </div>
-
-                        <!-- คำอธิบายหน้ากรอกฟอร์ม -->
-                        <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-3 flex gap-3 items-center">
-                            <div class="text-indigo-500 text-lg"><i class="fa-solid fa-circle-check"></i></div>
-                            <p class="text-[10px] font-bold text-indigo-900 leading-tight">
-                                กรุณาตรวจสอบข้อมูลในขั้นตอนถัดไป ข้อมูลจะถูกคัดลอกเมื่อคุณกดยืนยันในหน้าสุดท้าย
-                            </p>
-                        </div>
-
                         <button type="submit" class="btn-primary w-full py-4 rounded-2xl text-white font-extrabold text-sm tracking-widest uppercase flex items-center justify-center gap-3 shadow-indigo-200 mt-4">
-                            ตรวจสอบข้อมูล (Review Detail)
+                            ตรวจสอบรายละเอียด
                             <i class="fa-solid fa-magnifying-glass text-xs opacity-70"></i>
                         </button>
                     </form>
@@ -308,9 +336,125 @@
             `;
         }
 
+        function showTagPayForm(service) {
+            content.innerHTML = `
+                <div class="page-transition">
+                    <div class="flex justify-between items-start mb-6">
+                        <button onclick="showHome()" class="text-slate-400 font-bold text-xs flex items-center gap-2 hover:text-emerald-600 transition">
+                            <i class="fa-solid fa-arrow-left"></i> ย้อนกลับ
+                        </button>
+                    </div>
+                    <div class="mb-8">
+                        <span class="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">Tag-pay Management</span>
+                        <h2 class="text-2xl font-black text-slate-900">${service.title}</h2>
+                        <p class="text-slate-400 text-xs font-medium">บริการเรียกรถรับของหน้าบ้าน สะดวก รวดเร็ว</p>
+                    </div>
+                    <form onsubmit="handleTagPayReview(event)" class="space-y-6">
+                        <div class="space-y-4">
+                            <div class="input-group">
+                                <label class="text-[10px] font-black text-slate-400 mb-1 block uppercase">ชื่อ - นามสกุล (ผู้ส่ง)</label>
+                                <input type="text" id="tp_name" placeholder="ระบุชื่อจริงของคุณ..." class="w-full px-4 py-3.5 text-sm font-bold" required>
+                            </div>
+                            <div class="input-group">
+                                <label class="text-[10px] font-black text-slate-400 mb-1 block uppercase">ที่อยู่ต้นทาง (จุดที่ให้ไปรับของ)</label>
+                                <textarea id="tp_address" rows="2" placeholder="บ้านเลขที่, ถนน, แขวง/เขต หรือจุดสังเกต..." class="w-full px-4 py-3.5 text-sm font-bold" required></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="input-group">
+                                    <label class="text-[10px] font-black text-slate-400 mb-1 block uppercase">เบอร์โทรติดต่อ</label>
+                                    <input type="tel" id="tp_tel" placeholder="010-xxxx-xxxx" class="w-full px-4 py-3.5 text-sm font-bold" required>
+                                </div>
+                                <div class="input-group">
+                                    <label class="text-[10px] font-black text-slate-400 mb-1 block uppercase">ไอดีไลน์ (Line ID)</label>
+                                    <input type="text" id="tp_line" placeholder="Line ID..." class="w-full px-4 py-3.5 text-sm font-bold" required>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-5">
+                                <div class="flex justify-between items-center mb-4">
+                                    <label class="text-xs font-extrabold text-slate-800 uppercase">จำนวนกล่องทั้งหมด</label>
+                                    <div class="flex items-center gap-4 bg-white border border-slate-100 rounded-xl p-1">
+                                        <button type="button" onclick="updateTPCount(-1)" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center">-</button>
+                                        <input type="number" id="tp_count" value="1" min="1" class="w-8 text-center border-none bg-transparent font-black text-emerald-600" readonly>
+                                        <button type="button" onclick="updateTPCount(1)" class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center">+</button>
+                                    </div>
+                                </div>
+                                <div class="space-y-2 pt-2 border-t border-slate-200">
+                                    <div class="flex justify-between text-[11px] font-medium text-slate-500">
+                                        <span>ค่าส่ง (1,000 วอน × <span id="tp_display_count">1</span> กล่อง)</span>
+                                        <span id="tp_box_total">1,000 วอน</span>
+                                    </div>
+                                    <div class="flex justify-between text-[11px] font-medium text-slate-500">
+                                        <span>ค่าประสานงานระบบ (คงที่)</span>
+                                        <span>1,000 วอน</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm font-black text-slate-900 pt-3 mt-1 border-t border-dashed border-slate-300">
+                                        <span>ยอดรวมสุทธิ</span>
+                                        <span class="text-emerald-600 text-xl" id="tp_total">2,000 วอน</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="packing-instruction p-6 space-y-4">
+                            <h4 class="text-emerald-700 font-extrabold text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-box-open"></i>
+                                วิธีการแพ็กก่อนส่ง (หน้าบ้าน)
+                            </h4>
+                            <div class="space-y-3 text-[11px] font-bold text-emerald-800/80 leading-relaxed">
+                                <div class="flex gap-3 items-start"><div class="step-badge mt-0.5">1</div><p>หากล่องที่แข็งแรงมาใส่สิ่งของให้เรียบร้อย</p></div>
+                                <div class="flex gap-3 items-start"><div class="step-badge mt-0.5">2</div><p>ปิดเทปกาวที่ฝากล่องและก้นกล่องให้แน่นหนา</p></div>
+                                <div class="flex gap-3 items-start"><div class="step-badge mt-0.5">3</div><p>เขียน <span class="text-emerald-900 underline">ชื่อ-นามสกุล ภาษาอังกฤษ</span> และ <span class="text-emerald-900 underline">ที่อยู่ปลายทาง</span> ลงในกระดาษสีขาว แล้วแปะติดไว้ที่ข้างกล่อง</p></div>
+                                <div class="flex gap-3 items-start"><div class="step-badge mt-0.5">4</div><p>นำกล่องวางไว้หน้าบ้านในจุดที่มองเห็นง่าย แล้ว <span class="text-emerald-900 underline">ถ่ายรูปส่งให้แอดมิน</span> ในขั้นตอนถัดไป</p></div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-tagpay w-full py-5 rounded-2xl text-white font-extrabold text-sm tracking-widest uppercase flex items-center justify-center gap-3">
+                            ตรวจสอบรายละเอียด (Review)
+                            <i class="fa-solid fa-magnifying-glass text-xs opacity-70"></i>
+                        </button>
+                    </form>
+                </div>
+            `;
+        }
+
+        function updateTPCount(delta) {
+            const input = document.getElementById('tp_count');
+            let val = parseInt(input.value) + delta;
+            if (val < 1) val = 1;
+            input.value = val;
+            
+            const boxTotal = val * BOX_PRICE;
+            const finalTotal = boxTotal + SYSTEM_FEE;
+            
+            document.getElementById('tp_display_count').innerText = val;
+            document.getElementById('tp_box_total').innerText = boxTotal.toLocaleString() + ' วอน';
+            document.getElementById('tp_total').innerText = finalTotal.toLocaleString() + ' วอน';
+        }
+
+        function handleTagPayReview(e) {
+            e.preventDefault();
+            const count = parseInt(document.getElementById('tp_count').value);
+            const boxTotal = count * BOX_PRICE;
+            const total = boxTotal + SYSTEM_FEE;
+            
+            const data = {
+                id: 'TP' + Math.floor(100000 + Math.random() * 900000),
+                service: 'เรียกแท็กเป (Tag-pay)',
+                name: document.getElementById('tp_name').value,
+                address: document.getElementById('tp_address').value,
+                tel: document.getElementById('tp_tel').value,
+                line: document.getElementById('tp_line').value,
+                count: count,
+                boxTotal: boxTotal,
+                systemFee: SYSTEM_FEE,
+                total: total
+            };
+            
+            const message = `แจ้งเรียกแท็กเป: ${data.id}\nชื่อผู้ส่ง: ${data.name}\nจุดรับของ: ${data.address}\nเบอร์ติดต่อ: ${data.tel}\nID Line: ${data.line}\nจำนวนกล่อง: ${data.count} กล่อง\n(ค่าส่ง ${data.boxTotal.toLocaleString()} + ระบบ ${data.systemFee.toLocaleString()})\nยอดรวม: ${data.total.toLocaleString()} วอน`;
+            showFinalReview(data, message, true);
+        }
+
         function handleReview(e, serviceTitle) {
             e.preventDefault();
-            const bookingData = {
+            const data = {
                 id: 'KR' + Math.floor(100000 + Math.random() * 900000),
                 service: serviceTitle,
                 car: document.querySelector('input[name="car"]:checked').value,
@@ -321,119 +465,60 @@
                 pax: document.getElementById('pax').value,
                 luggage: document.getElementById('luggage').value
             };
-
-            showFinalReview(bookingData);
+            const message = `แจ้งงาน: ${data.id}\nบริการ: ${data.service}\nประเภทรถ: ${data.car}\nต้นทาง: ${data.origin}\nปลายทาง: ${data.destination}\nID Line: ${data.lineId}\nวันเวลา: ${data.time}`;
+            showFinalReview(data, message, false);
         }
 
-        function showFinalReview(data) {
-            const message = `แจ้งงานใหม่: ${data.id}\n` +
-                            `------------------\n` +
-                            `บริการ: ${data.service}\n` +
-                            `ประเภทรถ: ${data.car}\n` +
-                            `ต้นทาง: ${data.origin}\n` +
-                            `ปลายทาง: ${data.destination}\n` +
-                            `ID Line: ${data.lineId}\n` +
-                            `วัน/เวลา: ${data.time}\n` +
-                            `จำนวนคน: ${data.pax} คน\n` +
-                            `ปริมาณของ: ${data.luggage}\n` +
-                            `------------------\n` +
-                            `ประสานงานโดย KR Service`;
-
+        function showFinalReview(data, message, isTagPay) {
             content.innerHTML = `
                 <div class="page-transition">
                     <button onclick="showHome()" class="mb-6 text-slate-400 font-bold text-xs flex items-center gap-2 hover:text-indigo-600 transition">
                         <i class="fa-solid fa-xmark"></i> ยกเลิก
                     </button>
-
                     <div class="mb-6">
-                        <span class="text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em]">Final Verification</span>
-                        <h2 class="text-2xl font-black text-slate-900">ตรวจสอบรายละเอียด</h2>
-                        <p class="text-slate-400 text-xs font-medium">กรุณาตรวจสอบข้อมูลก่อนส่งให้แอดมิน</p>
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em] ${isTagPay?'text-emerald-500':'text-indigo-500'}">Final Verification</span>
+                        <h2 class="text-2xl font-black text-slate-900">ตรวจสอบข้อมูล</h2>
                     </div>
-
                     <div class="bg-slate-50 border border-slate-100 rounded-3xl p-6 space-y-4 mb-8">
-                        <div class="flex justify-between border-b border-slate-200 pb-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">บริการ</span>
-                            <span class="text-xs font-black text-slate-800">${data.service}</span>
-                        </div>
-                        <div class="flex justify-between border-b border-slate-200 pb-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">รถที่เลือก</span>
-                            <span class="text-xs font-black text-slate-800">${data.car}</span>
-                        </div>
-                        <div class="space-y-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase block text-indigo-500">ต้นทาง - ปลายทาง</span>
-                            <p class="text-xs font-bold text-slate-800 leading-relaxed">${data.origin} <i class="fa-solid fa-arrow-right mx-1 opacity-30"></i> ${data.destination}</p>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 pt-2">
-                            <div>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase block">เวลานัดหมาย</span>
-                                <span class="text-xs font-black text-slate-800">${data.time}</span>
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase block">ไอดีไลน์</span>
-                                <span class="text-xs font-black text-indigo-600 underline">${data.lineId}</span>
-                            </div>
-                        </div>
+                        <div class="flex justify-between border-b pb-2"><span class="text-[10px] font-bold text-slate-400 uppercase">บริการ</span><span class="text-xs font-black">${data.service}</span></div>
+                        ${isTagPay ? `
+                            <div class="space-y-1"><span class="text-[10px] font-bold text-slate-400 uppercase">ชื่อผู้ส่ง</span><p class="text-xs font-black">${data.name}</p></div>
+                            <div class="space-y-1"><span class="text-[10px] font-bold text-slate-400 uppercase">จุดรับ</span><p class="text-xs font-bold">${data.address}</p></div>
+                            <div class="flex justify-between"><span class="text-[10px] font-bold text-slate-400 uppercase">จำนวน</span><span class="text-xs font-black">${data.count} กล่อง</span></div>
+                            <div class="flex justify-between pt-2 border-t border-dashed border-slate-200"><span class="text-[10px] font-bold text-slate-400 uppercase">ค่าส่งรวม</span><span class="text-xs font-bold">${data.boxTotal.toLocaleString()} วอน</span></div>
+                            <div class="flex justify-between"><span class="text-[10px] font-bold text-slate-400 uppercase">ค่าระบบ</span><span class="text-xs font-bold">${data.systemFee.toLocaleString()} วอน</span></div>
+                            <div class="flex justify-between pt-2 border-t"><span class="text-[10px] font-black text-emerald-500 uppercase italic">ยอดรวมทั้งหมด</span><span class="text-sm font-black text-emerald-600">${data.total.toLocaleString()} วอน</span></div>
+                        ` : `
+                            <div class="flex justify-between border-b pb-2"><span class="text-[10px] font-bold text-slate-400 uppercase">รถ</span><span class="text-xs font-black">${data.car}</span></div>
+                            <div class="space-y-1"><span class="text-[10px] font-bold text-slate-400 uppercase">เส้นทาง</span><p class="text-xs font-bold">${data.origin} → ${data.destination}</p></div>
+                        `}
                     </div>
-
-                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6">
-                        <div class="flex gap-3">
-                            <i class="fa-solid fa-copy text-amber-500 mt-1"></i>
-                            <div>
-                                <p class="text-[11px] font-black text-amber-900 mb-1">ขั้นตอนถัดไป:</p>
-                                <p class="text-[10px] text-amber-800/80 leading-relaxed">
-                                    กดปุ่ม <b>"ประสานงานเลย"</b> ระบบจะคัดลอกข้อความข้างต้น และนำท่านไปยังแอป Line จากนั้นให้กด <b>"วาง"</b> เพื่อส่งข้อมูลให้แอดมินครับ
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button onclick="finalizeAndSend(\`${message.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)" class="btn-primary w-full py-5 rounded-2xl text-white font-extrabold text-sm tracking-widest uppercase flex items-center justify-center gap-3 shadow-indigo-200">
-                        ประสานงานเลย (Copy & Send)
-                        <i class="fa-solid fa-paper-plane text-xs opacity-70"></i>
-                    </button>
-                    
-                    <button onclick="showForm('${services.find(s=>s.title===data.service).id}')" class="w-full mt-4 py-4 text-slate-400 font-bold text-xs uppercase tracking-widest text-center">
-                        แก้ไขข้อมูล
+                    <button onclick="finalizeAndSend(\`${message.replace(/\n/g, '\\n')}\`)" class="${isTagPay?'btn-tagpay':'btn-primary'} w-full py-5 rounded-2xl text-white font-extrabold text-sm uppercase flex items-center justify-center gap-3">
+                        ส่งข้อมูลทาง Line
+                        <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </div>
             `;
         }
 
         function finalizeAndSend(message) {
-            // Copy to Clipboard
             const textArea = document.createElement("textarea");
             textArea.value = message;
             document.body.appendChild(textArea);
             textArea.select();
             document.execCommand('copy');
             document.body.removeChild(textArea);
-
             showToast();
-
-            // Open Line
-            setTimeout(() => {
-                window.location.href = 'https://line.me/ti/p/~@445ltjiu';
-                showFinalStep(message);
-            }, 600);
+            setTimeout(() => { window.location.href = 'https://line.me/ti/p/@445ltjiu'; showFinalStep(); }, 600);
         }
 
-        function showFinalStep(message) {
+        function showFinalStep() {
             content.innerHTML = `
                 <div class="page-transition flex flex-col items-center justify-center py-10 text-center">
-                    <div class="w-24 h-24 bg-indigo-600 text-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-xl animate-bounce">
-                        <i class="fa-brands fa-line"></i>
-                    </div>
-                    <h2 class="text-2xl font-black text-slate-900 mb-2">เข้าสู่แอป Line แล้ว</h2>
-                    <p class="text-slate-400 text-sm font-medium px-8 mb-8">หากแอปไม่เปิดขึ้นมา ให้กดเปิดใหม่อีกครั้งที่ปุ่มด้านล่าง และอย่าลืมกด <b>"วาง"</b> ข้อความที่คัดลอกไว้</p>
-                    
-                    <button onclick="window.location.href='https://line.me/ti/p/~@445ltjiu'" class="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase flex items-center gap-3 shadow-lg mb-4">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> เปิดแอป Line อีกครั้ง
-                    </button>
-                    
-                    <button onclick="window.location.reload()" class="text-slate-300 font-bold text-xs uppercase tracking-widest">
-                        กลับหน้าหลัก
-                    </button>
+                    <div class="w-20 h-20 bg-emerald-500 text-white rounded-full flex items-center justify-center text-3xl mb-6 shadow-xl"><i class="fa-brands fa-line"></i></div>
+                    <h2 class="text-2xl font-black mb-2">เปิด Line เรียบร้อย</h2>
+                    <p class="text-slate-400 text-sm px-10 mb-8">กด <b>"วาง" (Paste)</b> ในแชทเพื่อส่งข้อมูลครับ</p>
+                    <button onclick="showHome()" class="text-indigo-600 font-bold text-xs uppercase tracking-widest">กลับหน้าหลัก</button>
                 </div>
             `;
         }
@@ -448,4 +533,6 @@
     </script>
 </body>
 </html>
+
+
 
